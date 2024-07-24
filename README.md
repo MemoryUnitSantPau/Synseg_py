@@ -73,50 +73,6 @@ Finally, the script creates a text file storing the values of all function argum
 
 ### SYN_DENSITY
 
-The SYN_DENSITY script serves as the core component for calculating object density within images, particularly applicable in neuroscience for analyzing synaptic density via microscopy images. It employs a series of image processing techniques to accurately identify and quantify objects of interest within the images.
-
-The "Densiometer" function in the script is defined to encapsulate the density calculation process. It accepts various input parameters such as the directory path containing the image files, the project technique, the neuropil channel identifier, pixel size ratios, and the channels to process.
-
-The function iterates through each image file containing the neuropil channel in the specified directory, performing the following process for it and each channel specified. The image is loaded using OpenCV (cv2) and segmented by selecting all the signal above 0 to detect the objects per frame using SciPy.
-
-For the neuropil channel, a z projection of the stack of images is calculated by selecting the maximum pixel value of each pixel across the z-axis. The image is then dilated and eroded using OpenCV with an elliptical kernel of 39 x 39 and 21 x 21 pixels, respectively. The resulting image is segmented by keeping the signal above 0, and the area with the signal is obtained, multiplied by the number of frames, and subtracted from the total pixel volume of the stack. The neuropil area image is saved as Neuropilmask.tif using OpenCV.
-
-Finally, for each channel, the density of objects per neuropil area is calculated and transformed to µm³ using the user-specified x-y and z ratios. The same calculation is performed to calculate the density per total area.
-
-The results from each iteration, including total area, neuropil area, object number, total density, neuropil density, and surface area, are compiled into a pandas DataFrame for ease of manipulation. Columns are then reordered for improved readability. Finally, the results are written to a TSV file for further analysis and visualization.
-
-
-#### INPUTS
-- Path: path to the directory containing the image files to process.
-    - The program expects the filenames of the images from the same region to keep the same filename only changing the channel. (Ex: 001_PSD95_segmentation.tif, 001_SYPH_segmentation.tif)
-- tech (PROJECT_TECHNIQUE) : Indicates the technique of image aquisition to load presets for the pixel size parameters.
-- nc (NEUROPIL_CHANNEL) : Name indicating the channel used to calculate the neuropil area.
-- xy (X_Y_RATIO) : pixel size for x and y dimensions.
-- z (Z_RATIO) : pixel size for z dimension.
-- c (CHANNELS) : Project channel names.
-
-#### OUTPUTS
-
-- Density_results_(date).csv 
-    This file contains the results calculated on the script.
-    Each row represents an image.
-    The columns contain:
-    - areatotal : Total volume of pixels on the image.
-    - areaneuropil : The area where the proteins can be detected (outside nucleus).
-    - ObjN : Total number of identifyed objects (accounting for connectivity on the 3 dimensions).
-    - density_total_area : density of objects per um in the total image pixel volume.
-    - density_area_neuropil : density of objects per um the area neuropil volume of pixels calculated.
-    - layer_surface: surface of pixels on a frame of the image.
-    - frame_(X)_ObjN : Number of objects identifyed on the frame X.
-    - density_frame_(X) : Density of objects on a frame per surface of the frame.
-
-#### Example
-
-`python SYN_DENSITY.py /path/to/files -tech STORM -nc SYPH -c SYPH PSD95`
-
-
-### SYN_DENSITY_per_channel
-
 The method described herein details the process of performing density calculations on image files utilizing Python programming language libraries. The primary functionalities involve image processing, object identification and data analysis.
 
 The function accepts several parameters, including the directory path containing image files, project technique, neuropil channel identifier, connectivity for object identification, intensity threshold for object identification, and pixel size ratios. This function iterates through each image file in the specified directory, performing the following procedure.
@@ -161,9 +117,9 @@ The results are finally stored in a CSV file for further processing and analysis
     - density : density of objects per um in the total image pixel volume.
 
 #### Example
-`python SYN_DENSITY_per_channel_NEW.py /path/to/files -tech STORM -con 3 -th 0`
+`python SYN_DENSITY.py /path/to/files -tech STORM -con 3 -th 0`
 
-### DISTANCE_AND_SHAPE
+### SYN_DISTANCE_AND_SHAPE
 
 The distance_and_shape function performs image analysis and shape comparison on pairs of images with a common name but different channels. The function processes .tif files from a specified directory, calculates the distance between centroids of objects in different channels, and extracts various shape properties. It then saves the results in CSV files for further analysis.
 
@@ -192,50 +148,6 @@ The function produces three CSV files:
 #### EXAMPLE
 
 `python SYN_DISTANCE_AND_SHAPE.py /path/to/files --um_pix_ratio 0.4274 --plot_save`
-
-
-### SYN_DISTANCE
-
-Perform a workflow to analyze and measure objects in a series of microscopy images.
-
-This function reads a series of microscopy images from a specified directory, performs object
-detection and measurement, and saves the results to a CSV file. It also provides the option
-to save visualization plots.
-
-#### INPUTS
-- PATH : path to the directory containing the image files to process.
-- th_percent : percentageof maximum intensity to segment the image.
-- x_y_ratio : ratio of pixel to um 
-- plot_save : Indicate to save or not the image intermediate files.
-
-#### OUTPUTS
-
-- Distance_results_(date).csv
-    This file contains the following information for each image frame:
-    - Name : File name
-    - Frame : Frame indicator
-    - Centroid_(CH1_name) : Centroid coordinates for the first protein channel
-    - Centroid_(CH2_name) : Centroid coordinates for the second protein channel
-    - Perimeter_P_(CH1_name) : Perimeter point nearest to the other protein channel
-    - Perimeter_P_(CH2_name) : Perimeter point nearest to the other protein channel
-    - Area_(CH1_name) : Channel 1 image Area in pixels
-    - Area_(CH2_name) : Channel 2 image Area in pixels
-    - Area_um_(CH1_name) : Image area in um
-    - Area_um_(CH2_name) : Image area in um
-    - Center_Distance_px:
-    - Perimeter_Distance_px :
-    - Center_Distance_um :
-    - Perimeter_Distance_um : 
-    - Perimeter_Distance_um : 
-    - Average_Distance_um: 
-
-Images:
-    Inside a new folder called VIZ the visualization of the distance per frame is stored as .tif files.
-
-#### Example
-
-`python SYN_DISTANCE.py /path/to/files -th_percent 0.2 -um_pix_ratio 0.008 -neuropil_ch SYPH -plot_save`
-
 
 ## Requirements
 Python version : Python 3.10.10
