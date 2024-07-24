@@ -178,5 +178,5 @@ This pattern will permit the functions to recognise correctly the information ob
 
 ## Contact
 
-mail erika - 
-mail quim 
+For information about the paper contact Erika Sanchez-Aced esanchezac@santpau.cat
+For information about the code contact Joaquim Aumatell Escabias jaumatelle@santpau.cat 
