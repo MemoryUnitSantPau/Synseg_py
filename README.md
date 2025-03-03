@@ -4,7 +4,7 @@
 
 This repository contains the scripts used to perform segmentation, density, and distance analysis of proteins in STORM images.
 
-The scripts were used in __Enhancing lateral resolution using direct stochastic optical reconstruction microscopy (dSTORM) to unravel synaptic tau pathology in Alzheimer’s disease__, which can be found at ________________.
+The scripts were used in __Enhancing lateral resolution using direct stochastic optical reconstruction microscopy (dSTORM) to unravel synaptic tau pathology in Alzheimer’s disease__, which can be found at [10.1111/nan.70010](https://dx.doi.org/10.1111/nan.70010).
 
 ## Installation
 
